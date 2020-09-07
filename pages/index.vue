@@ -1,34 +1,46 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        ecommerce-nuxt
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+  <div>
+    <div
+      class="m-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4"
+    >
+      <div
+        v-for="p in products"
+        :key="p.id"
+        class="border rounded-lg bg-gray-100 hover:shadow-lg"
+      >
+        <nuxt-link :to="`/products/${p.id}`">
+          <div class="rounded-t-lg bg-white pt-2 pb-2">
+            <img
+              class=" h-48 w-full object-cover"
+              :src="`http://localhost:1337${p.image.url}`"
+            />
+          </div>
+          <div class="pl-4 pr-4 pb-4 pt-4 rounded-lg">
+            <h4
+              class="mt-1 font-semibold text-base leading-tight truncate text-gray-700"
+            >
+              {{ p.title }}
+            </h4>
+            <div class="mt-1 text-sm text-gray-700">{{ p.description }}</div>
+          </div>
+        </nuxt-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      products: []
+    };
+  },
+  created: async function() {
+    const res = await fetch("http://localhost:1337/products");
+    this.products = await res.json();
+  }
+};
 </script>
 
 <style>
@@ -47,16 +59,8 @@ export default {}
 }
 
 .title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
